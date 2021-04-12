@@ -68,15 +68,15 @@ client.connect(err => {
     const file = req.files.file;
     const name = req.body.name;
     const email = req.body.email;
-    const filePath = `${__dirname}/doctors/${file.name}`;
+    // const filePath = `${__dirname}/doctors/${file.name}`;
     console.log(name, email, file)
 
-    file.mv(filePath, err => {
-      if(err){
-        console.log(err)
-        res.status(500).send({msg: 'Failed to upload image to server'})
-      }
-      const newImg = fs.readFileSync(filePath);
+    // file.mv(filePath, err => {
+    //   if(err){
+    //     console.log(err)
+    //     res.status(500).send({msg: 'Failed to upload image to server'})
+    //   }
+      const newImg = file.readFileSync(filePath);
       const encImg = newImg.toString('base64');
 
       var image = {
@@ -87,16 +87,16 @@ client.connect(err => {
 
       doctorCollection.insertOne({name, email, image})
       .then(result => {
-        fs.remove(filePath, error => {
-          if(error) {
-            console.log(error)
-          res.status(500).send({msg: 'Failed to upload image to mongo'})
-          }
+        // fs.remove(filePath, error => {
+        //   if(error) {
+        //     console.log(error)
+        //   res.status(500).send({msg: 'Failed to upload image to mongo'})
+        //   }
           res.send(result.insertedCount > 0);
-        })
+        // })
       })
       // return res.send({name: file.name, path: `/${file.name}`})
-    })
+    // })
   })
 
   //get all doctor data prom database
